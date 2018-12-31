@@ -1,0 +1,130 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <link rel="icon" href="JS.png">
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- See https://goo.gl/qRE0vM -->
+    <meta name="theme-color" content="#03A9F4">
+
+    <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Jamie Smith">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jamie Smith's .com">
+
+    <!-- Homescreen icons -->
+    <link rel="apple-touch-icon" href="JS.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="JS.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="JS.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="JS.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="JS.png">
+
+    <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="JS.png">
+    <meta name="msapplication-TileColor" content="#03A9F4">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <title>Jamie Smith</title>
+
+    <script type="module" src="./static-header.js"></script>
+    <script type="module" src="./scroll-footer.js"></script>
+    <script type="module" src="./profile-card.js"></script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            background: #EEE;
+            -webkit-tap-highlight-color: transparent;
+            /*font-family: 'Roboto', 'Noto', sans-serif;*/
+        }
+        div {
+            height: 100%;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <static-header></static-header>
+
+    <div class="hide view Contact">Contact View</div>
+    <div class="hide view Home">
+        <profile-card></profile-card>
+
+        
+
+    </div>
+    <div class="hide view Projects">Projects View</div>
+    <div class="hide view Sounds">Sounds View</div>
+
+    <scroll-footer></scroll-footer>
+</body>
+
+<script>
+    const items = [{
+        uid: 'contact',
+        default: false,
+        svg: `<svg viewBox="0 0 100 100" ><use href="icons.svg#contact_icon"></use></svg>`
+    },
+    {
+        uid: 'home',
+        default: true,
+        svg: `<svg viewBox="0 0 100 100" ><use href="icons.svg#home_icon"></use></svg>`
+    }, {
+        uid: 'projects',
+        default: false,
+        svg: `<svg viewBox="0 0 100 100" ><use href="icons.svg#project_icon"></use></svg>`
+    }, {
+        uid: 'sounds',
+        default: false,
+        svg: `<svg viewBox="0 0 100 100" ><use href="icons.svg#speaker_icon"></use></svg>`
+    }]
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const dom = {
+            views: document.querySelectorAll(`.view`)
+          , footer: document.querySelector('scroll-footer')
+          , profile: document.querySelector('profile-card')
+          , header: document.querySelector('static-header')
+        }
+
+        dom.footer.addEventListener("nav", e => {
+            
+            const uid = e.detail.clicked
+            
+            dom.views.forEach(el => el.classList.add('hide'))
+            const el = document.querySelector(`.${uid}`)
+            el.classList.remove('hide')
+        })
+        dom.footer.setAttribute('items', JSON.stringify(items))
+        
+
+        dom.profile.addEventListener("nav", e => 
+            dom.footer.setAttribute("select", e.detail.clicked))    
+        dom.profile.setAttribute('image', "gene.jpg")
+        dom.profile.setAttribute('profilepic', "me-2017.jpg")
+        
+        
+        dom.header.setAttribute("title", "Jamie Smith")
+        dom.header.setAttribute("icon", "JS.png")
+    })
+    
+
+</script>
+
+</html>
